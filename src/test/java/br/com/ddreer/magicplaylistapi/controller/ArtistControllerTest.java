@@ -1,9 +1,9 @@
 package br.com.ddreer.magicplaylistapi.controller;
 
-import br.com.ddreer.magicplaylistapi.enums.CityEnum;
 import br.com.ddreer.magicplaylistapi.exception.BusinessException;
 import br.com.ddreer.magicplaylistapi.model.ArtistDTO;
 import br.com.ddreer.magicplaylistapi.service.ArtistServiceImpl;
+import br.com.ddreer.magicplaylistapi.utility.InformationGenerator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ArtistControllerTest {
+public class ArtistControllerTest extends InformationGenerator {
     private final static String ENDPOINT = "/artist";
     private final static String NOT_SAVED = "Unable to save artist";
     private final static String NOT_DELETED = "Unable to delete artist";
@@ -43,13 +43,7 @@ public class ArtistControllerTest {
 
     @BeforeAll
     public static void setup() {
-        artist.setId(UUID.randomUUID());
-        artist.setArtisticName("JhanZão");
-        artist.setRealName("João da Silva");
-        artist.setNationality(CityEnum.SAO);
-        artist.setDebutYear(1999);
-        artist.setActive(true);
-
+        artist = createAnArtistDTOForTests();
         artistList = Collections.singletonList(artist);
     }
 
