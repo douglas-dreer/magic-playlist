@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RecordServiceImplTest {
     private final static String ARTIST_NOT_SAVED = "Unable to save record";
-    private static Record recordSaved = new Record();
+    private static final Record recordSaved = new Record();
     private static RecordDTO recordDTO = new RecordDTO();
     private static List<RecordDTO> recordDTOList = new ArrayList<>();
     private static List<Record> recordList = new ArrayList<>();
@@ -150,23 +150,15 @@ public class RecordServiceImplTest {
     @Test
     void mustReturnRecordDTOWhenDelete() {
         UUID id = recordSaved.getId();
-
-        when(repository.findById(any())).thenReturn(Optional.of(recordSaved));
+        when(repository.existsById(any())).thenReturn(true);
         doNothing().when(repository).deleteById(id);
-
-        boolean result = service.delete(id);
-
-        assertTrue(result);
+        assertTrue(service.delete(id));
     }
 
     @Test
     void mustReturnBusinessExceptionWhenDelete() {
         UUID id = recordSaved.getId();
-
-        when(repository.findById(any())).thenThrow(new BusinessException("Not found record"));
-
-        boolean result = service.delete(id);
-
-        assertFalse(result);
+        when(repository.existsById(any())).thenReturn(false);
+        assertFalse(service.delete(id));
     }
 }
