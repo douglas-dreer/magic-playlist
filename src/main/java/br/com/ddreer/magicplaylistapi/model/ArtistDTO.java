@@ -2,15 +2,16 @@ package br.com.ddreer.magicplaylistapi.model;
 
 import br.com.ddreer.magicplaylistapi.entity.Artist;
 import br.com.ddreer.magicplaylistapi.enums.CityEnum;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Builder
 public class ArtistDTO extends ModelBase<Artist> {
     private UUID id;
