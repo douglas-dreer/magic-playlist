@@ -3,16 +3,15 @@ package br.com.ddreer.magicplaylistapi.entity;
 import br.com.ddreer.magicplaylistapi.enums.CityEnum;
 import br.com.ddreer.magicplaylistapi.model.RecordDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "TBL001_RECORDS")
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 public class Record extends EntityBase<RecordDTO> {
     @Id

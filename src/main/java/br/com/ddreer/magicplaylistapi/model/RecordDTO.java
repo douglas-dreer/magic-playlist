@@ -2,14 +2,13 @@ package br.com.ddreer.magicplaylistapi.model;
 
 import br.com.ddreer.magicplaylistapi.entity.Record;
 import br.com.ddreer.magicplaylistapi.enums.CityEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 public class RecordDTO extends ModelBase<Record> {
     private UUID id;
