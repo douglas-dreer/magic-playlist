@@ -2,9 +2,7 @@ package br.com.ddreer.magicplaylistapi.entity;
 
 import br.com.ddreer.magicplaylistapi.model.AlbumDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +10,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "TBL003_ALBUMS")
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+
 @Builder
 public class Album extends EntityBase<AlbumDTO> {
     @Id

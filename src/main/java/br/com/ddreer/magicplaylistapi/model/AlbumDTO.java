@@ -1,15 +1,14 @@
 package br.com.ddreer.magicplaylistapi.model;
 
 import br.com.ddreer.magicplaylistapi.entity.Album;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class AlbumDTO extends ModelBase<Album> {
     private UUID id;
