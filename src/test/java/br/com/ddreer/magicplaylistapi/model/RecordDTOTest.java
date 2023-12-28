@@ -14,7 +14,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class RecordDTOTest extends InformationGenerator implements ModelBaseTest {
+class RecordDTOTest extends InformationGenerator implements ModelBaseTest {
     private static RecordDTO dto = new RecordDTO();
 
     private static UUID uuid = UUID.randomUUID();

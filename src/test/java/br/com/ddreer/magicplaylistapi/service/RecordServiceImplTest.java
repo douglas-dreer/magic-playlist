@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RecordServiceImplTest {
-    private final static String NOT_SAVED = "Unable to save record";
+    private final static String ARTIST_NOT_SAVED = "Unable to save record";
     private static Record recordSaved = new Record();
     private static RecordDTO recordDTO = new RecordDTO();
     private static List<RecordDTO> recordDTOList = new ArrayList<>();
@@ -109,7 +109,7 @@ public class RecordServiceImplTest {
 
     @Test
     void mustReturnRecordDTOSBusinessExceptionWhenSaveRecord() {
-        when(repository.save(any())).thenThrow(new BusinessException(NOT_SAVED));
+        when(repository.save(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
 
         RecordDTO result = service.save(recordDTO);
 

@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class RecordControllerTest {
     private final static String ENDPOINT = "/record";
-    private final static String NOT_SAVED = "Unable to save record";
+    private final static String ARTIST_NOT_SAVED = "Unable to save record";
     private final static String NOT_DELETED = "Unable to delete record";
     private static List<RecordDTO> recordList = new ArrayList<>();
     private static RecordDTO record = new RecordDTO();
@@ -104,7 +104,7 @@ public class RecordControllerTest {
 
     @Test
     void mustReturnRecordDTOBusinessExceptionWhenSave() throws Exception {
-        when(service.save(any())).thenThrow(new BusinessException(NOT_SAVED));
+        when(service.save(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
 
         MockHttpServletRequestBuilder postMethod = post(ENDPOINT)
                 .content(record.toJSON())
@@ -154,7 +154,7 @@ public class RecordControllerTest {
         UUID id = record.getId();
         String uri = String.format("%s/%s", ENDPOINT, id);
 
-        when(service.edit(any())).thenThrow(new BusinessException(NOT_SAVED));
+        when(service.edit(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
 
         MockHttpServletRequestBuilder putMethod = put(uri)
                 .content(record.toJSON())

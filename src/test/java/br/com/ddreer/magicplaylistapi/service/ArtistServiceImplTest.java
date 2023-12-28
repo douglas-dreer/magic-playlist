@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ArtistServiceImplTest {
-    private final static String NOT_SAVED = "Unable to save artist";
+    private final static String ARTIST_NOT_SAVED = "Unable to save artist";
     private static Artist artistSaved = new Artist();
     private static ArtistDTO artistDTO = new ArtistDTO();
     private static List<ArtistDTO> artistDTOList = new ArrayList<>();
@@ -126,7 +126,7 @@ public class ArtistServiceImplTest {
 
     @Test
     void mustReturnArtistDTOSBusinessExceptionWhenSaveRecord() {
-        when(repository.save(any())).thenThrow(new BusinessException(NOT_SAVED));
+        when(repository.save(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
 
         ArtistDTO result = service.save(artistDTO);
 
@@ -167,7 +167,7 @@ public class ArtistServiceImplTest {
     void mustReturnArtistDTOWhenDelete() {
         UUID id = artistSaved.getId();
 
-        when(repository.findById(any())).thenReturn(Optional.of(artistSaved));
+        when(repository.existsById(any())).thenReturn(true);
         doNothing().when(repository).deleteById(id);
 
         boolean result = service.delete(id);
@@ -179,7 +179,7 @@ public class ArtistServiceImplTest {
     void mustReturnBusinessExceptionWhenDelete() {
         UUID id = artistSaved.getId();
 
-        when(repository.findById(any())).thenThrow(new BusinessException("Not found record"));
+        when(repository.existsById(any())).thenReturn(false);
 
         boolean result = service.delete(id);
 

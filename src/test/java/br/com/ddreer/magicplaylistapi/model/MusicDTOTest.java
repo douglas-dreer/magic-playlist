@@ -15,7 +15,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class MusicDTOTest extends InformationGenerator implements ModelBaseTest {
+class MusicDTOTest extends InformationGenerator implements ModelBaseTest {
     private static UUID uuid;
     private static String title;
     private static List<ArtistDTO> musicComposers;

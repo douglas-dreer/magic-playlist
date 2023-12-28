@@ -15,8 +15,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Log4j2
 public class RecordServiceImpl implements RecordService {
-    private final String NOT_FOUND = "Not found record";
-    private final String NOT_SAVED = "Unable to save record";
+    private final String ARTIST_NOT_FOUND = "Not found record";
+    private final String ARTIST_NOT_SAVED = "Unable to save record";
     private RecordRepository repository;
 
     @Override
@@ -27,7 +27,7 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public RecordDTO findById(UUID id) {
         try {
-            return repository.findById(id).orElseThrow(() -> new BusinessException(NOT_FOUND)).toDTO();
+            return repository.findById(id).orElseThrow(() -> new BusinessException(ARTIST_NOT_FOUND)).toDTO();
         } catch (BusinessException e) {
             log.info(e.getLocalizedMessage());
             return null;
@@ -44,7 +44,7 @@ public class RecordServiceImpl implements RecordService {
         try {
             return repository.save(dto.toEntity()).toDTO();
         } catch (BusinessException e) {
-            log.error(NOT_SAVED);
+            log.error(ARTIST_NOT_SAVED);
         }
         return null;
     }
@@ -53,7 +53,7 @@ public class RecordServiceImpl implements RecordService {
     public RecordDTO edit(RecordDTO dto) {
         try {
             if (!repository.existsById(dto.getId())) {
-                throw new BusinessException(NOT_FOUND);
+                throw new BusinessException(ARTIST_NOT_FOUND);
             }
 
             return repository.saveAndFlush(dto.toEntity()).toDTO();
@@ -68,7 +68,9 @@ public class RecordServiceImpl implements RecordService {
     public boolean delete(UUID id) {
         boolean status = false;
         try {
-            repository.findById(id).orElseThrow(() -> new BusinessException(NOT_FOUND));
+            if (!repository.existsById(id)) {
+                throw new BusinessException(ARTIST_NOT_FOUND);
+            }
             repository.deleteById(id);
             status = true;
         } catch (BusinessException e) {

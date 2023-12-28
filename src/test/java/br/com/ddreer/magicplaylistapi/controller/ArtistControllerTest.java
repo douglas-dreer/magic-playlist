@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class ArtistControllerTest extends InformationGenerator {
     private final static String ENDPOINT = "/artist";
-    private final static String NOT_SAVED = "Unable to save artist";
+    private final static String ARTIST_NOT_SAVED = "Unable to save artist";
     private final static String NOT_DELETED = "Unable to delete artist";
     private static List<ArtistDTO> artistList = new ArrayList<>();
     private static ArtistDTO artist = new ArtistDTO();
@@ -113,7 +113,7 @@ public class ArtistControllerTest extends InformationGenerator {
 
     @Test
     void mustReturnArtistDTOBusinessExceptionWhenSave() throws Exception {
-        when(service.save(any())).thenThrow(new BusinessException(NOT_SAVED));
+        when(service.save(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
 
         MockHttpServletRequestBuilder postMethod = post(ENDPOINT)
                 .content(artist.toJSON())
@@ -163,7 +163,7 @@ public class ArtistControllerTest extends InformationGenerator {
         UUID id = artist.getId();
         String uri = String.format("%s/%s", ENDPOINT, id);
 
-        when(service.edit(any())).thenThrow(new BusinessException(NOT_SAVED));
+        when(service.edit(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
 
         MockHttpServletRequestBuilder putMethod = put(uri)
                 .content(artist.toJSON())

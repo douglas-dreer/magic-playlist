@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class MessageErrorDTO extends ModelBase {
+public class MessageErrorDTO {
     private String errorMessage;
     private String localDateTime;
     private String code;

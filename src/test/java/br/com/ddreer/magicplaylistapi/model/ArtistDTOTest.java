@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Log4j2
-public class ArtistDTOTest extends InformationGenerator implements ModelBaseTest {
+class ArtistDTOTest extends InformationGenerator implements ModelBaseTest {
     private static ArtistDTO dto = new ArtistDTO();
     private static UUID uuid = UUID.randomUUID();
     private static String artisticName;
