@@ -1,10 +1,7 @@
 package br.com.ddreer.magicplaylistapi.model;
 
 import br.com.ddreer.magicplaylistapi.enums.StatusEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +9,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class MessageErrorDTO {
+@Builder
+public class MessageErrorDTO extends ModelBase {
     private String errorMessage;
     private String localDateTime;
     private String code;
