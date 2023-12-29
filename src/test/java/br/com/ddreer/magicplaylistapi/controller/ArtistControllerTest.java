@@ -1,10 +1,10 @@
 package br.com.ddreer.magicplaylistapi.controller;
 
+import br.com.ddreer.magicplaylistapi.controller.common.BaseControllerTest;
 import br.com.ddreer.magicplaylistapi.exception.BusinessException;
 import br.com.ddreer.magicplaylistapi.model.ArtistDTO;
 import br.com.ddreer.magicplaylistapi.service.ArtistServiceImpl;
 import br.com.ddreer.magicplaylistapi.utility.InformationGenerator;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -30,38 +29,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ArtistControllerTest extends InformationGenerator {
+class ArtistControllerTest extends InformationGenerator implements BaseControllerTest {
     private final static String ENDPOINT = "/artist";
     private final static String ARTIST_NOT_SAVED = "Unable to save artist";
     private final static String NOT_DELETED = "Unable to delete artist";
-    private static List<ArtistDTO> artistList = new ArrayList<>();
-    private static ArtistDTO artist = new ArtistDTO();
+    private final static List<ArtistDTO> resultList = Collections.singletonList(createAnArtistDTOForTests());
+    private static final ArtistDTO result = createAnArtistDTOForTests();
+
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private ArtistServiceImpl service;
 
-    @BeforeAll
-    public static void setup() {
-        artist = createAnArtistDTOForTests();
-        artistList = Collections.singletonList(artist);
-    }
-
+    @Override
     @Test
-    void mustReturnListartistDTOSuccessWhenList() throws Exception {
+    public void mustReturnSuccessWhenList() throws Exception {
         MockHttpServletRequestBuilder getMethod = get(ENDPOINT);
-        when(service.list()).thenReturn(artistList);
+
+        when(service.list()).thenReturn(resultList);
+
         mockMvc.perform(getMethod)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(1)));
     }
 
+    @Override
     @Test
-    void mustReturnArtistDTOSuccessWhenFindById() throws Exception {
-        UUID id = artist.getId();
+    public void mustReturnSuccessWhenFindById() throws Exception {
+        UUID id = result.getId();
         String uri = String.format("%s/%s", ENDPOINT, id);
 
-        when(service.findById(any())).thenReturn(artist);
+        when(service.findById(any())).thenReturn(result);
 
         MockHttpServletRequestBuilder getMethod = get(uri);
 
@@ -72,9 +70,9 @@ public class ArtistControllerTest extends InformationGenerator {
 
     @Test
     void mustReturnListartistDTOSuccessWhenFindByRealName() throws Exception {
-        String name = artist.getRealName();
+        String name = result.getRealName();
 
-        when(service.findByRealName(anyString())).thenReturn(artistList);
+        when(service.findByRealName(anyString())).thenReturn(resultList);
 
         MockHttpServletRequestBuilder getMethod = get(ENDPOINT)
                 .queryParam("real-name", name);
@@ -86,9 +84,9 @@ public class ArtistControllerTest extends InformationGenerator {
 
     @Test
     void mustReturnListartistDTOSuccessWhenFindByArtistName() throws Exception {
-        String name = artist.getArtisticName();
+        String name = result.getArtisticName();
 
-        when(service.findByArtisticName(anyString())).thenReturn(artistList);
+        when(service.findByArtisticName(anyString())).thenReturn(resultList);
 
         MockHttpServletRequestBuilder getMethod = get(ENDPOINT)
                 .queryParam("artist-name", name);
@@ -98,12 +96,14 @@ public class ArtistControllerTest extends InformationGenerator {
                 .andExpect(status().isOk());
     }
 
+
+    @Override
     @Test
-    void mustReturnArtistDTOSuccessWhenSave() throws Exception {
-        when(service.save(any())).thenReturn(artist);
+    public void mustReturnSuccessWhenSave() throws Exception {
+        when(service.save(any())).thenReturn(result);
 
         MockHttpServletRequestBuilder postMethod = post(ENDPOINT)
-                .content(artist.toJSON())
+                .content(result.toJSON())
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
         mockMvc.perform(postMethod)
@@ -111,102 +111,103 @@ public class ArtistControllerTest extends InformationGenerator {
                 .andExpect(status().isCreated());
     }
 
+    @Override
     @Test
-    void mustReturnArtistDTOBusinessExceptionWhenSave() throws Exception {
+    public void mustReturnInternalErrorExceptionWhenSave() throws Exception {
         when(service.save(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
 
         MockHttpServletRequestBuilder postMethod = post(ENDPOINT)
-                .content(artist.toJSON())
+                .content(result.toJSON())
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
         mockMvc.perform(postMethod)
                 .andDo(print())
                 .andExpect(status().isInternalServerError());
+
     }
 
+    @Override
     @Test
-    void mustReturnArtistDTOSuccessWhenEdit() throws Exception {
-        UUID id = artist.getId();
+    public void mustReturnSuccessWhenEdit() throws Exception {
+        UUID id = result.getId();
         String uri = String.format("%s/%s", ENDPOINT, id);
 
-        when(service.edit(any())).thenReturn(artist);
+        when(service.edit(any())).thenReturn(result);
 
         MockHttpServletRequestBuilder putMethod = put(uri)
-                .content(artist.toJSON())
+                .content(result.toJSON())
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
         mockMvc.perform(putMethod)
                 .andDo(print())
-                .andExpect(status().isCreated());
-
+                .andExpect(status().isOk());
     }
 
+    @Override
     @Test
-    void mustReturnArtistDTOBadRequestExceptionWhenEdit() throws Exception {
+    public void mustReturnBadRequestExceptionWhenEdit() throws Exception {
         UUID id = UUID.randomUUID();
         String uri = String.format("%s/%s", ENDPOINT, id);
 
-        when(service.edit(any())).thenReturn(artist);
+        when(service.edit(any())).thenReturn(result);
 
         MockHttpServletRequestBuilder putMethod = put(uri)
-                .content(artist.toJSON())
+                .content(result.toJSON())
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
         mockMvc.perform(putMethod)
                 .andDo(print())
                 .andExpect(status().isBadRequest());
-
     }
 
+    @Override
     @Test
-    void mustReturnArtistDTOBusinessExceptionWhenEdit() throws Exception {
-        UUID id = artist.getId();
+    public void mustReturnNotFoundExceptionWhenEdit() throws Exception {
+        UUID id = result.getId();
         String uri = String.format("%s/%s", ENDPOINT, id);
 
-        when(service.edit(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
+        when(service.edit(any())).thenReturn(null);
 
         MockHttpServletRequestBuilder putMethod = put(uri)
-                .content(artist.toJSON())
+                .content(result.toJSON())
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
         mockMvc.perform(putMethod)
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
-
+                .andExpect(status().isNotFound());
     }
 
+    @Override
     @Test
-    void mustReturnArtistDTOSuccessWhenDelete() throws Exception {
-        UUID id = artist.getId();
+    public void mustReturnSuccessWhenDelete() throws Exception {
+        UUID id = result.getId();
         String uri = String.format("%s/%s", ENDPOINT, id);
 
         when(service.delete(any())).thenReturn(true);
 
         MockHttpServletRequestBuilder deleteMethod = delete(uri)
-                .content(artist.toJSON())
+                .content(result.toJSON())
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
         mockMvc.perform(deleteMethod)
                 .andDo(print())
                 .andExpect(status().isOk());
-
     }
 
+    @Override
     @Test
-    void mustReturnArtistDTOBusinessExceptionWhenDelete() throws Exception {
-        UUID id = artist.getId();
+    public void mustReturnBusinessExceptionWhenDelete() throws Exception {
+        UUID id = result.getId();
         String uri = String.format("%s/%s", ENDPOINT, id);
 
-        when(service.delete(any())).thenThrow(new BusinessException(NOT_DELETED));
+        when(service.delete(any())).thenReturn(false);
 
         MockHttpServletRequestBuilder deleteMethod = delete(uri)
-                .content(artist.toJSON())
+                .content(result.toJSON())
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
         mockMvc.perform(deleteMethod)
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
-
+                .andExpect(status().isNotFound());
     }
-
 }

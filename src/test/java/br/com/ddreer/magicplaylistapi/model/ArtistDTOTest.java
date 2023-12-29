@@ -3,6 +3,7 @@ package br.com.ddreer.magicplaylistapi.model;
 import br.com.ddreer.magicplaylistapi.entity.Artist;
 import br.com.ddreer.magicplaylistapi.entity.Music;
 import br.com.ddreer.magicplaylistapi.enums.CityEnum;
+import br.com.ddreer.magicplaylistapi.model.common.ModelBaseTest;
 import br.com.ddreer.magicplaylistapi.utility.InformationGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.log4j.Log4j2;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Log4j2
 class ArtistDTOTest extends InformationGenerator implements ModelBaseTest {
-    private static ArtistDTO dto = new ArtistDTO();
+    private static final ArtistDTO dto = createAnArtistDTOForTests();
     private static UUID uuid = UUID.randomUUID();
     private static String artisticName;
     private static String realName;
@@ -34,8 +35,6 @@ class ArtistDTOTest extends InformationGenerator implements ModelBaseTest {
 
     @BeforeAll
     public static void setup() {
-
-        dto = createAnArtistDTOForTests();
         uuid = dto.getId();
         artisticName = dto.getArtisticName();
         realName = dto.getRealName();
@@ -48,7 +47,6 @@ class ArtistDTOTest extends InformationGenerator implements ModelBaseTest {
         MusicDTO music = createAMusicDTOForTests(dto);
         dto.setComposedMusic(Collections.singletonList(music));
         composedMusicList = dto.getComposedMusic();
-
     }
 
     @Override

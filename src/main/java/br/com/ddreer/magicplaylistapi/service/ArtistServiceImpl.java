@@ -1,16 +1,17 @@
 package br.com.ddreer.magicplaylistapi.service;
 
-import br.com.ddreer.magicplaylistapi.entity.Artist;
 import br.com.ddreer.magicplaylistapi.exception.BusinessException;
 import br.com.ddreer.magicplaylistapi.model.ArtistDTO;
 import br.com.ddreer.magicplaylistapi.repository.ArtistRepository;
-import br.com.ddreer.magicplaylistapi.utility.Converter;
+import br.com.ddreer.magicplaylistapi.service.common.ArtistService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+
+import static br.com.ddreer.magicplaylistapi.utility.Converter.mapList;
 
 @Service
 @AllArgsConstructor
@@ -22,7 +23,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public List<ArtistDTO> list() {
-        return Converter.mapList(repository.findAll(), ArtistDTO.class);
+        return mapList(repository.findAll(), ArtistDTO.class);
     }
 
     @Override
@@ -37,12 +38,12 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public List<ArtistDTO> findByRealName(String realName) {
-        return repository.findAllByRealNameLikeIgnoreCase(realName);
+        return mapList(repository.findAllByRealNameLikeIgnoreCase(realName), ArtistDTO.class);
     }
 
     @Override
     public List<ArtistDTO> findByArtisticName(String artistName) {
-        return repository.findAllByArtisticNameLikeIgnoreCase(artistName);
+        return mapList(repository.findAllByArtisticNameLikeIgnoreCase(artistName), ArtistDTO.class);
     }
 
     @Override
@@ -61,7 +62,6 @@ public class ArtistServiceImpl implements ArtistService {
             if (!repository.existsById(dto.getId())) {
                 throw new BusinessException(ARTIST_NOT_FOUND);
             }
-
             return repository.saveAndFlush(dto.toEntity()).toDTO();
 
         } catch (BusinessException e) {
@@ -77,10 +77,10 @@ public class ArtistServiceImpl implements ArtistService {
                 throw new BusinessException(ARTIST_NOT_FOUND);
             }
             repository.deleteById(id);
-            return true;
         } catch (BusinessException e) {
             log.info(e.getLocalizedMessage());
             return false;
         }
+        return true;
     }
 }

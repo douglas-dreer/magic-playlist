@@ -1,6 +1,7 @@
 package br.com.ddreer.magicplaylistapi.model;
 
 import br.com.ddreer.magicplaylistapi.enums.StatusEnum;
+import br.com.ddreer.magicplaylistapi.model.common.ModelBaseTest;
 import br.com.ddreer.magicplaylistapi.utility.InformationGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.log4j.Log4j2;

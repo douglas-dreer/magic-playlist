@@ -21,8 +21,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<MessageErrorDTO> handleException(Exception e) {
+    public ResponseEntity<MessageErrorDTO> handleException(BusinessException e) {
         MessageErrorDTO errorDTO = new MessageErrorDTO(e.getLocalizedMessage(), StatusEnum.ERROR);
-        return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

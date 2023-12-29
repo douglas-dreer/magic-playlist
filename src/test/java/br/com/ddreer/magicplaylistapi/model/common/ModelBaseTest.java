@@ -1,4 +1,4 @@
-package br.com.ddreer.magicplaylistapi.model;
+package br.com.ddreer.magicplaylistapi.model.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
