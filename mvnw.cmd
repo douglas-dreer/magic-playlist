@@ -92,7 +92,7 @@ set WDIR=%EXEC_DIR%
 :findBaseDir
 IF EXIST "%WDIR%"\.mvn goto baseDirFound
 cd ..
-IF "%WDIR%"=="%CD%" goto baseDirNotFound
+IF "%WDIR%"=="%CD%" goto baseDirARTIST_NOT_FOUND
 set WDIR=%CD%
 goto findBaseDir
 
@@ -101,7 +101,7 @@ set MAVEN_PROJECTBASEDIR=%WDIR%
 cd "%EXEC_DIR%"
 goto endDetectBaseDir
 
-:baseDirNotFound
+:baseDirARTIST_NOT_FOUND
 set MAVEN_PROJECTBASEDIR=%EXEC_DIR%
 cd "%EXEC_DIR%"
 

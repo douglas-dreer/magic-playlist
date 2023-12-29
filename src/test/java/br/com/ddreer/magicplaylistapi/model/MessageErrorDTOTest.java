@@ -84,6 +84,16 @@ class MessageErrorDTOTest extends InformationGenerator implements ModelBaseTest 
         log.warn("This test is not necessary");
     }
 
+    @Override
+    public void mustReturnSuccessWhenEquals() {
+
+    }
+
+    @Override
+    public void mustReturnSuccessWhenHash() {
+
+    }
+
     @Test
     void mustReturnSuccessWhenInitializeWithCityEnum() {
         MessageErrorDTO result = new MessageErrorDTO("Error on CityEnum", StatusEnum.ERROR);

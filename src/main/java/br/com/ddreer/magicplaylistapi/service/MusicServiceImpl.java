@@ -3,6 +3,7 @@ package br.com.ddreer.magicplaylistapi.service;
 import br.com.ddreer.magicplaylistapi.model.ArtistDTO;
 import br.com.ddreer.magicplaylistapi.model.MusicDTO;
 import br.com.ddreer.magicplaylistapi.model.RecordDTO;
+import br.com.ddreer.magicplaylistapi.service.common.MusicService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

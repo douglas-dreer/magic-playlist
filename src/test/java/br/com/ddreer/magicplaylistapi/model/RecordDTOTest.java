@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -85,6 +86,25 @@ class RecordDTOTest extends InformationGenerator implements ModelBaseTest {
     public void mustReturnSuccessWhenConterToObject() throws IOException {
         final String toJSON = dto.toJSON();
         checking(dto.toObject(toJSON));
+    }
+
+    @Override
+    @Test
+    public void mustReturnSuccessWhenEquals() {
+        List<RecordDTO> recordList = createThreeDifferentRecordDTO();
+        assertEquals(recordList.get(0), recordList.get(0));
+        assertEquals(recordList.get(0), recordList.get(1));
+        assertNotEquals(recordList.get(0), recordList.get(2));
+        assertNotNull(recordList.get(0));
+        assertNotEquals("Anything", recordList.get(0));
+    }
+
+
+    @Override
+    @Test
+    public void mustReturnSuccessWhenHash() {
+        List<RecordDTO> recordList = createThreeDifferentRecordDTO();
+        assertEquals(recordList.get(0).hashCode(), recordList.get(1).hashCode());
     }
 
     private void checking(RecordDTO dados) {

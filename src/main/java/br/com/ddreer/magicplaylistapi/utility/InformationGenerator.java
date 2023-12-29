@@ -10,6 +10,7 @@ import br.com.ddreer.magicplaylistapi.model.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -61,6 +62,19 @@ public class InformationGenerator {
 
     public static RecordDTO createARecordDTOForTests() {
         return createARecordForTests().toDTO();
+    }
+
+    public static List<RecordDTO> createThreeDifferentRecordDTO() {
+        UUID uuid = UUID.randomUUID();
+
+        RecordDTO diff = createARecordDTOForTests();
+        diff.setId(uuid);
+
+        return Arrays.asList(diff, diff, createARecordDTOForTests());
+    }
+
+    public static List<Record> createThreeDifferentRecord() {
+        return mapList(createThreeDifferentRecordDTO(), Record.class);
     }
 
     public static Album createAnAlbumForTests(List<Music> musicList, List<Artist> artistList, Record recordCompany) {

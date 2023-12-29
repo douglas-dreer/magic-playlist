@@ -1,5 +1,6 @@
 package br.com.ddreer.magicplaylistapi.entity;
 
+import br.com.ddreer.magicplaylistapi.entity.common.BaseEntityTest;
 import br.com.ddreer.magicplaylistapi.model.AlbumDTO;
 import br.com.ddreer.magicplaylistapi.model.ArtistDTO;
 import br.com.ddreer.magicplaylistapi.model.MusicDTO;

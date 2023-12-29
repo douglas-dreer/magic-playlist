@@ -1,6 +1,7 @@
 package br.com.ddreer.magicplaylistapi.model;
 
 import br.com.ddreer.magicplaylistapi.entity.Album;
+import br.com.ddreer.magicplaylistapi.model.common.ModelBaseTest;
 import br.com.ddreer.magicplaylistapi.utility.InformationGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeAll;
@@ -93,6 +94,16 @@ class AlbumDTOTest extends InformationGenerator implements ModelBaseTest {
     public void mustReturnSuccessWhenConterToObject() throws IOException {
         final String toJSON = dto.toJSON();
         checking(dto.toObject(toJSON));
+    }
+
+    @Override
+    public void mustReturnSuccessWhenEquals() {
+
+    }
+
+    @Override
+    public void mustReturnSuccessWhenHash() {
+
     }
 
     public void checking(AlbumDTO datas) {

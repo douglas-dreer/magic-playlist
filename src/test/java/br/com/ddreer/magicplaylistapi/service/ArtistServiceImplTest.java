@@ -51,7 +51,7 @@ class ArtistServiceImplTest extends InformationGenerator implements BaseServiceT
     @Override
     @Test
     public void mustReturnBusinessExceptionWhenFindById() {
-        when(repository.findById(any())).thenReturn(Optional.ofNullable(null));
+        when(repository.findById(any())).thenReturn(Optional.empty());
         assertNull(service.findById(artist.getId()));
     }
 

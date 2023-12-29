@@ -108,6 +108,16 @@ class ArtistDTOTest extends InformationGenerator implements ModelBaseTest {
         checking(dto.toObject(toJSON));
     }
 
+    @Override
+    public void mustReturnSuccessWhenEquals() {
+
+    }
+
+    @Override
+    public void mustReturnSuccessWhenHash() {
+
+    }
+
     private void checking(ArtistDTO datas) {
         assertAll("Verify result list",
                 () -> assertNotNull(datas, "The music should not be null"),

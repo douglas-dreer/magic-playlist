@@ -16,4 +16,6 @@ public interface ModelBaseTest {
     void mustReturnSuccessWhenConvertToJSON() throws JsonProcessingException;
 
     void mustReturnSuccessWhenConterToObject() throws IOException;
+    void mustReturnSuccessWhenEquals();
+    void mustReturnSuccessWhenHash();
 }
