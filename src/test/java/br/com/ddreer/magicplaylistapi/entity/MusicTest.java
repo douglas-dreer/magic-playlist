@@ -1,5 +1,6 @@
 package br.com.ddreer.magicplaylistapi.entity;
 
+import br.com.ddreer.magicplaylistapi.entity.common.BaseEntityTest;
 import br.com.ddreer.magicplaylistapi.model.MusicDTO;
 import br.com.ddreer.magicplaylistapi.utility.InformationGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;

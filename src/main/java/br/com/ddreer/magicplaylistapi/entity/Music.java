@@ -1,5 +1,6 @@
 package br.com.ddreer.magicplaylistapi.entity;
 
+import br.com.ddreer.magicplaylistapi.entity.common.BaseEntity;
 import br.com.ddreer.magicplaylistapi.model.MusicDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class Music extends EntityBase<MusicDTO> {
+public class Music extends BaseEntity<MusicDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
