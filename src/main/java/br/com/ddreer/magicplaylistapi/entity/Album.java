@@ -16,12 +16,18 @@ import java.util.UUID;
 @Data
 @Builder
 public class Album extends BaseEntity<AlbumDTO> {
+    public Album() {
+        super(AlbumDTO.class);
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
-    @ManyToMany(mappedBy = "album")
+
+    @OneToMany(mappedBy = "album")
     private List<Music> musicList;
+
     @ManyToMany
     @JoinTable(
             name = "TBL005_ALBUM_ARTISTS",
@@ -29,14 +35,11 @@ public class Album extends BaseEntity<AlbumDTO> {
             inverseJoinColumns = @JoinColumn(name = "artist_id")
     )
     private List<Artist> artistList;
+
     @ManyToOne
     @JoinColumn(name = "record_id")
     private Record recordCompany;
+
     private int releaseYear;
-
-    public Album() {
-        super(AlbumDTO.class);
-    }
-
-
 }
+

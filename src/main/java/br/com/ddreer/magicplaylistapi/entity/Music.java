@@ -20,13 +20,16 @@ public class Music extends BaseEntity<MusicDTO> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String title;
+
     @ManyToMany
     @JoinTable(
             name = "TBL006_MUSIC_COMPOSERS",
             joinColumns = @JoinColumn(name = "music_id"),
             inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private List<Artist> musicComposers;
+
     private int releaseYear;
+
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
