@@ -9,7 +9,7 @@ public interface BaseServiceTest {
 
     void mustReturnSuccessWhenSave();
 
-    void mustReturnArtistDTOSBusinessExceptionWhenSave();
+    void mustReturnBusinessExceptionWhenSave();
 
     void mustReturnSuccessWhenEdit();
 
