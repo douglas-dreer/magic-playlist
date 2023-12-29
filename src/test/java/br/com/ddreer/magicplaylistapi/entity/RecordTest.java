@@ -1,5 +1,6 @@
 package br.com.ddreer.magicplaylistapi.entity;
 
+import br.com.ddreer.magicplaylistapi.entity.common.BaseEntityTest;
 import br.com.ddreer.magicplaylistapi.enums.CityEnum;
 import br.com.ddreer.magicplaylistapi.model.RecordDTO;
 import br.com.ddreer.magicplaylistapi.utility.InformationGenerator;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class RecordTest extends InformationGenerator implements BaseEntityTest {
-    private static Record entity = new Record();
+    private static final Record entity = createARecordForTests();
     private static UUID uuid;
     private static String name;
     private static CityEnum city;
@@ -24,7 +25,6 @@ public class RecordTest extends InformationGenerator implements BaseEntityTest {
 
     @BeforeAll
     public static void setup() {
-        entity = createARecordForTests();
         uuid = entity.getId();
         name = entity.getName();
         city = entity.getCity();

@@ -1,18 +1,20 @@
 package br.com.ddreer.magicplaylistapi.service;
 
 import br.com.ddreer.magicplaylistapi.entity.Record;
-import br.com.ddreer.magicplaylistapi.enums.CityEnum;
 import br.com.ddreer.magicplaylistapi.exception.BusinessException;
 import br.com.ddreer.magicplaylistapi.model.RecordDTO;
 import br.com.ddreer.magicplaylistapi.repository.RecordRepository;
-import org.junit.jupiter.api.BeforeAll;
+import br.com.ddreer.magicplaylistapi.service.common.BaseServiceTest;
+import br.com.ddreer.magicplaylistapi.utility.InformationGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,143 +24,100 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class RecordServiceImplTest {
-    private final static String ARTIST_NOT_SAVED = "Unable to save record";
-    private static final Record recordSaved = new Record();
-    private static RecordDTO recordDTO = new RecordDTO();
-    private static List<RecordDTO> recordDTOList = new ArrayList<>();
-    private static List<Record> recordList = new ArrayList<>();
+class RecordServiceImplTest extends InformationGenerator implements BaseServiceTest {
     @InjectMocks
     private RecordServiceImpl service;
     @Mock
     private RecordRepository repository;
 
-    @BeforeAll
-    public static void setup() {
-        recordSaved.setId(UUID.randomUUID());
-        recordSaved.setName("Globa Records");
-        recordSaved.setCity(CityEnum.RIO);
-        recordSaved.setFoundingYear(1990);
-        recordSaved.setActive(true);
+    private final static String RECORD_NOT_SAVED = "Unable to save record";
+    private static final RecordDTO record = createARecordDTOForTests();
+    private static final List<Record> recordList = Collections.singletonList(createARecordForTests());
 
-        recordDTO = recordSaved.toDTO();
-        recordDTOList = Collections.singletonList(recordDTO);
-        recordList = Collections.singletonList(recordSaved);
-    }
-
+    @Override
     @Test
-    void mustReturnListRecordDTOWhenList() {
+    public void mustReturnSuccessWhenList() {
         when(repository.findAll()).thenReturn(recordList);
+        checking(service.list());
+    }
 
-        List<RecordDTO> resultList = service.list();
+    @Override
+    @Test
+    public void mustReturnSuccessWhenFindById() {
+        when(repository.findById(any())).thenReturn(Optional.of(record.toEntity()));
+        checking(service.findById(record.getId()));
+    }
 
-        assertAll("Verify result",
-                () -> assertFalse(resultList.isEmpty(), "Result list should not be empty"),
-                () -> assertEquals(1, resultList.size(), "The results list must contain 1 element")
-        );
+    @Override
+    @Test
+    public void mustReturnBusinessExceptionWhenFindById() {
+        when(repository.findById(any())).thenReturn(Optional.empty());
+        assertNull(service.findById(record.getId()));
     }
 
     @Test
-    void mustReturnRecordDTOWhenFindId() {
-        when(repository.findById(any())).thenReturn(Optional.of(recordSaved));
+    void mustReturnSuccessWhenFindByName() {
+        when(repository.findAllByNameLikeIgnoreCase(anyString())).thenReturn(recordList);
+        checking(service.findByName(record.getName()));
+    }
 
-        UUID id = recordSaved.getId();
+    @Override
+    @Test
+    public void mustReturnSuccessWhenSave() {
+        when(repository.save(any())).thenReturn(record.toEntity());
+        checking(service.save(record));
+    }
 
-        RecordDTO result = service.findById(id);
+    @Override
+    @Test
+    public void mustReturnBusinessExceptionWhenSave() {
+        when(repository.save(any())).thenThrow(new BusinessException(RECORD_NOT_SAVED));
+        assertNull(service.save(record));
+    }
 
+    @Override
+    @Test
+    public void mustReturnSuccessWhenEdit() {
+        when(repository.existsById(any())).thenReturn(true);
+        when(repository.saveAndFlush(any())).thenReturn(record.toEntity());
+        checking(service.edit(record));
+    }
+
+    @Override
+    @Test
+    public void mustReturnBusinessExceptionWhenEdit() {
+        when(repository.existsById(any())).thenReturn(false);
+        assertNull(service.edit(record));
+    }
+
+    @Override
+    @Test
+    public void mustReturnSuccessWhenDelete() {
+        when(repository.existsById(any())).thenReturn(true);
+        doNothing().when(repository).deleteById(record.getId());
+        assertTrue(service.delete(record.getId()));
+    }
+
+    @Override
+    @Test
+    public void mustReturnBusinessExceptionWhenDelete() {
+        when(repository.existsById(any())).thenReturn(false);
+        assertFalse(service.delete(record.getId()));
+    }
+
+    private void checking(RecordDTO model) {
         assertAll(
-                "item",
-                () -> assertNotNull(result, "Result list should not be null"),
-                () -> assertEquals(id, result.getId(), "The element id must be the same as the one sent")
+                "checking record's properties",
+                () -> assertNotNull(model, "Result list should not be null"),
+                () -> assertEquals(record.getId(), model.getId(), "The element id must be the same as the one sent")
         );
     }
 
-    @Test
-    void mustReturnBusinessExceptionWhenFindId() {
-        when(repository.findById(any())).thenThrow(new BusinessException("Not found record"));
-        UUID id = recordSaved.getId();
-
-        RecordDTO result = service.findById(id);
-
-        assertNull(result);
-    }
-
-    @Test
-    void mustReturnListRecordDTOWhenFindByName() {
-        when(repository.findAllByNameLikeIgnoreCase(anyString())).thenReturn(recordDTOList);
-
-        String name = recordSaved.getName();
-
-        List<RecordDTO> result = service.findByName(name);
-
-        assertAll("Verify result list",
-                () -> assertNotNull(result, "Result list should not be null"),
-                () -> assertFalse(result.isEmpty(), "Result list should not be empty"),
-                () -> result.forEach(item -> assertTrue(item.getName().contains(name), "Each RecordDTO name should contain the search term"))
+    private void checking(List<RecordDTO> modelList) {
+        assertAll(
+                "checking record's properties from list.",
+                () -> assertFalse(modelList.isEmpty()),
+                () -> assertEquals(modelList.size(), recordList.size())
         );
-    }
-
-    @Test
-    void mustReturnRecordDTOWhenSaveRecord() {
-        when(repository.save(any())).thenReturn(recordSaved);
-
-        RecordDTO result = service.save(recordDTO);
-
-        assertNotNull(result);
-    }
-
-    @Test
-    void mustReturnRecordDTOSBusinessExceptionWhenSaveRecord() {
-        when(repository.save(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
-
-        RecordDTO result = service.save(recordDTO);
-
-        assertNull(result);
-    }
-
-    @Test
-    void mustReturnRecordDTOWhenEdit() {
-        recordSaved.setCity(CityEnum.RIO);
-        recordDTO.setCity(CityEnum.RIO);
-
-        when(repository.saveAndFlush(any())).thenReturn(recordSaved);
-        when(repository.existsById(any())).thenReturn(true);
-
-        RecordDTO result = service.edit(recordDTO);
-
-        assertAll("Verify result list",
-                () -> assertNotNull(result, "Result list should not be null"),
-                () -> assertEquals(CityEnum.RIO, result.getCity(), "The element city must be the same as the one sent")
-        );
-    }
-
-    @Test
-    void mustReturnRecordDTOBusinessExceptionWhenEdit() {
-        recordSaved.setCity(CityEnum.RIO);
-        recordDTO.setCity(CityEnum.RIO);
-
-        when(repository.saveAndFlush(any())).thenReturn(recordSaved);
-        when(repository.existsById(any())).thenReturn(false);
-
-        RecordDTO result = service.edit(recordDTO);
-
-        assertAll("Verify result list",
-                () -> assertNull(result, "Result list should not be null")
-        );
-    }
-
-    @Test
-    void mustReturnRecordDTOWhenDelete() {
-        UUID id = recordSaved.getId();
-        when(repository.existsById(any())).thenReturn(true);
-        doNothing().when(repository).deleteById(id);
-        assertTrue(service.delete(id));
-    }
-
-    @Test
-    void mustReturnBusinessExceptionWhenDelete() {
-        UUID id = recordSaved.getId();
-        when(repository.existsById(any())).thenReturn(false);
-        assertFalse(service.delete(id));
     }
 }

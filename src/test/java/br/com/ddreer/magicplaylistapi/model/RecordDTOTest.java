@@ -2,6 +2,7 @@ package br.com.ddreer.magicplaylistapi.model;
 
 import br.com.ddreer.magicplaylistapi.entity.Record;
 import br.com.ddreer.magicplaylistapi.enums.CityEnum;
+import br.com.ddreer.magicplaylistapi.model.common.ModelBaseTest;
 import br.com.ddreer.magicplaylistapi.utility.InformationGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class RecordDTOTest extends InformationGenerator implements ModelBaseTest {
-    private static RecordDTO dto = new RecordDTO();
+    private static final RecordDTO dto = createARecordDTOForTests();
 
     private static UUID uuid = UUID.randomUUID();
     private static String name = "Globo Records";
@@ -25,7 +26,6 @@ class RecordDTOTest extends InformationGenerator implements ModelBaseTest {
 
     @BeforeAll
     public static void setup() {
-        dto = createARecordDTOForTests();
         uuid = dto.getId();
         name = dto.getName();
         city = dto.getCity();
