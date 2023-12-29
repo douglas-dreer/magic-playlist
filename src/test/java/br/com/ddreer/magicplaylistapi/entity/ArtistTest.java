@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,19 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ArtistTest extends InformationGenerator implements BaseEntityTest {
-    private static Artist entity = new Artist();
-    private static UUID uuid = UUID.randomUUID();
-    private static String artisticName = "Söejin";
-    private static String realName = "Douglas Dreer";
-    private static LocalDate birthday = LocalDate.of(1983, Month.AUGUST, 23);
-    private static CityEnum nationality = CityEnum.MGA;
-    private static int debutYear = 2023;
+    private static final Artist entity = createAnArtistForTests();
+    private static UUID uuid;
+    private static String artisticName;
+    private static String realName;
+    private static LocalDate birthday;
+    private static CityEnum nationality;
+    private static int debutYear;
     private static List<Music> composedMusic;
     private static boolean isActive = true;
 
     @BeforeAll
     public static void setup() {
-        entity = createAnArtistForTests();
         uuid = entity.getId();
         artisticName = entity.getArtisticName();
         realName = entity.getRealName();

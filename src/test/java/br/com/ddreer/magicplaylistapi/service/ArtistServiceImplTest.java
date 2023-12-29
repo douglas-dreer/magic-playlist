@@ -32,12 +32,12 @@ class ArtistServiceImplTest extends InformationGenerator implements BaseServiceT
 
     private static final String ARTIST_NOT_SAVED = "Unable to save artist";
     private static final ArtistDTO artist = createAnArtistDTOForTests();
-    private static final List<Artist> resultList = Collections.singletonList(createAnArtistForTests());
+    private static final List<Artist> artistList = Collections.singletonList(createAnArtistForTests());
 
     @Override
     @Test
     public void mustReturnSuccessWhenList() {
-        when(repository.findAll()).thenReturn(resultList);
+        when(repository.findAll()).thenReturn(artistList);
         checking(service.list());
     }
 
@@ -57,13 +57,13 @@ class ArtistServiceImplTest extends InformationGenerator implements BaseServiceT
 
     @Test
     void mustReturnListArtistDTOWhenFindByRealName() {
-        when(repository.findAllByRealNameLikeIgnoreCase(anyString())).thenReturn(resultList);
+        when(repository.findAllByRealNameLikeIgnoreCase(anyString())).thenReturn(artistList);
         checking(service.findByRealName(artist.getRealName()));
     }
 
     @Test
     void mustReturnListArtistDTOWhenFindByArtistName() {
-        when(repository.findAllByArtisticNameLikeIgnoreCase(anyString())).thenReturn(resultList);
+        when(repository.findAllByArtisticNameLikeIgnoreCase(anyString())).thenReturn(artistList);
         checking(service.findByArtisticName(artist.getArtisticName()));
     }
 
@@ -76,7 +76,7 @@ class ArtistServiceImplTest extends InformationGenerator implements BaseServiceT
 
     @Override
     @Test
-    public void mustReturnArtistDTOSBusinessExceptionWhenSave() {
+    public void mustReturnBusinessExceptionWhenSave() {
         when(repository.save(any())).thenThrow(new BusinessException(ARTIST_NOT_SAVED));
         assertNull(service.save(artist));
     }
@@ -123,7 +123,7 @@ class ArtistServiceImplTest extends InformationGenerator implements BaseServiceT
         assertAll(
                 "checking Artist's properties from list.",
                 () -> assertFalse(modelList.isEmpty()),
-                () -> assertEquals(modelList.size(), resultList.size())
+                () -> assertEquals(modelList.size(), artistList.size())
         );
     }
 }
